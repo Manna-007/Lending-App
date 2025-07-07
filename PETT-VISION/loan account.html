@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="loan account.css">
+    <title>Loan Account</title>
+</head>
+<body>
+    <h1>Loan Accounts</h1>
+    <div class="top-buttons">
+        <button type="button" onclick="window.location.href='add-loan-account.html'">Add</button>
+        <button type="button" onclick="filterLoanAccountsByDate()">Refresh</button>
+    </div>
+    <label for="loan-account-date">Date of Loan Account:</label>
+    <input type="date" id="loan-account-date" name="loan-account-date" required>
+    <br>
+    <div id="accounts-list"></div>
+
+    <table border="1" style="width:100%; text-align:center;">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Officer</th>
+                <th>Group</th>
+                <th>Member</th>
+                <th>Amount</th>
+                <th>Interest (%)</th>
+                <th>Duration</th>
+                <th>Repayment</th>
+                <th>Collateral</th>
+                <th>Collateral Price</th>
+            </tr>
+        </thead>
+        <tbody id="loan-accounts-list"></tbody>
+    </table>
+
+    <script>
+    function addLoanAccount() {
+        // Get values from the form
+        const date = document.getElementById('loan-account-date').value;
+        const officer = document.getElementById('loan-officer').value;
+        const group = document.getElementById('group-name').value;
+
+        if (!date || !officer || !group) {
+            alert('Please fill all fields.');
+            return;
+        }
+
+        // Get existing accounts or empty array
+        let accounts = JSON.parse(localStorage.getItem('LoanAccounts') || '[]');
+        // Add new account
+        accounts.push({ date, officer, group });
+        // Save back to localStorage
+        localStorage.setItem('LoanAccounts', JSON.stringify(accounts));
+        alert('Loan account added!');
+        // Optionally, refresh to show the new data
+        location.reload();
+    }
+
+    function loadLoanAccounts() {
+        let accounts = JSON.parse(localStorage.getItem('LoanAccounts') || '[]');
+        let tbody = document.getElementById('loan-accounts-list');
+        if (accounts.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='10'>No loan accounts found.</td></tr>";
+        } else {
+            tbody.innerHTML = accounts.map(acc => `
+                <tr>
+                    <td>${acc.date}</td>
+                    <td>${acc.officer}</td>
+                    <td>${acc.group}</td>
+                    <td>${acc.member}</td>
+                    <td>${acc.amount}</td>
+                    <td>${acc.interest}</td>
+                    <td>${acc.duration}</td>
+                    <td>${acc.repayment}</td>
+                    <td>${acc.collateral}</td>
+                    <td>${acc.collateralPrice}</td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    function filterLoanAccountsByDate() {
+        const selectedDate = document.getElementById('loan-account-date').value;
+        let accounts = JSON.parse(localStorage.getItem('LoanAccounts') || '[]');
+        let tbody = document.getElementById('loan-accounts-list');
+
+        // If no date selected, show all
+        let filtered = selectedDate
+            ? accounts.filter(acc => acc.date === selectedDate)
+            : accounts;
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='10'>No loan accounts found for this date.</td></tr>";
+        } else {
+            tbody.innerHTML = filtered.map(acc => `
+                <tr>
+                    <td>${acc.date || ''}</td>
+                    <td>${acc.officer || ''}</td>
+                    <td>${acc.group || ''}</td>
+                    <td>${acc.member || ''}</td>
+                    <td>${acc.amount || ''}</td>
+                    <td>${acc.interest || ''}</td>
+                    <td>${acc.duration || ''}</td>
+                    <td>${acc.repayment || ''}</td>
+                    <td>${acc.collateral || ''}</td>
+                    <td>${acc.collateralPrice || ''}</td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    // Load all accounts on page load
+    window.onload = filterLoanAccountsByDate;
+    </script>
+</body>
+</html>

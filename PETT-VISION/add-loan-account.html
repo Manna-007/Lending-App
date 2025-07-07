@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Loan Account - PETT VISION</title>
+    <link rel="stylesheet" href="add loan account.css">
+</head>
+<body>
+    <div class="loan-account-container">
+        <h1 class="h1">Add Loan Account</h1>
+        <form id="add-loan-account-form" autocomplete="off">
+            <div class="input-box">
+                <label for="loan-officer">Loan Officer:</label>
+                <select id="loan-officer" name="loan-officer" required class="input-field">
+                    <option value="">--Select Loan Officer--</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <label for="group-name">Group Name:</label>
+                <select id="group-name" name="group-name" required class="input-field">
+                    <option value="">--Select Group--</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <label for="account-holder">Account Holder:</label>
+                <select id="account-holder" name="account-holder" required class="input-field">
+                    <option value="">--Select Member--</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <label for="account-type">Account Type:</label>
+                <select id="account-type" name="account-type" required class="input-field">
+                    <option value="">--Select Type--</option>
+                    <option value="group">Small Loan Account (Group)</option>
+                    <option value="individual">Small Business Loan Account (Individual)</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <label for="loan-amount">Loan Amount:</label>
+                <input type="number" id="loan-amount" name="loan-amount" required class="input-field" placeholder="Enter amount">
+            </div>
+            <div class="input-box">
+                <label for="loan-purpose">Loan Purpose:</label>
+                <input type="text" id="loan-purpose" name="loan-purpose" required class="input-field" placeholder="Purpose of loan">
+            </div>
+            <div class="input-box">
+                <label for="loan-term">Loan Term (months):</label>
+                <input type="number" id="loan-term" name="loan-term" required class="input-field" placeholder="e.g. 12">
+            </div>
+            <div class="input-box">
+                <label for="interest-rate">Interest Rate (% per annum):</label>
+                <input type="number" id="interest-rate" name="interest-rate" required class="input-field" placeholder="e.g. 10">
+            </div>
+            <div class="input-box">
+                <label for="disbursement-date">Disbursement Date:</label>
+                <input type="date" id="disbursement-date" name="disbursement-date" required class="input-field">
+            </div>
+            <div class="input-box">
+                <label for="instalment-type">Instalment Type:</label>
+                <select id="instalment-type" name="instalment-type" required class="input-field">
+                    <option value="">--Select Type--</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <label for="advance-instalments">Advance Instalments Paid:</label>
+                <input type="number" id="advance-instalments" min="0" value="0" class="input-field">
+            </div>
+            <div class="input-box">
+                <label for="penalty-rate">Penalty Rate (% per overdue):</label>
+                <input type="number" id="penalty-rate" value="2" class="input-field">
+            </div>
+            <div class="input-box">
+                <label for="repayment-method">Repayment Method:</label>
+                <select id="repayment-method" name="repayment-method" required class="input-field">
+                    <option value="">--Select Method--</option>
+                    <option value="cash">Cash</option>
+                    <option value="bank-transfer">Bank Transfer</option>
+                    <option value="mobile-money">Mobile Money</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <label for="collateral">Collateral:</label>
+                <textarea id="collateral" name="collateral" class="input-field" placeholder="Details about collateral"></textarea>
+            </div>
+            <button type="button" class="submit" onclick="showRepaymentSchedule()">Show Repayment Schedule</button>
+            <button type="submit" class="submit">Add Loan Account</button>
+        </form>
+        <div id="loan-processing-fee-box" style="margin:24px 0; background:#f6faff; border-radius:12px; padding:18px; box-shadow:0 2px 8px rgba(45,137,239,0.07); color:#2d89ef; font-size:1.1rem; font-weight:600; display:none;">
+            Loan Processing Fee (6%): <span id="processing-fee-amount">0.00</span>
+        </div>
+        <div id="repayment-schedule-container"></div>
+    </div>
+    <script>
+    // --- Populate Loan Officer Dropdown ---
+    function populateLoanOfficers() {
+        let groups = JSON.parse(localStorage.getItem('Groups') || '[]');
+        let officers = Array.from(new Set(groups.map(g => g.loanOfficer).filter(Boolean)));
+        const select = document.getElementById('loan-officer');
+        select.innerHTML = '<option value="">--Select Loan Officer--</option>';
+        officers.forEach(officer => {
+            select.innerHTML += `<option value="${officer}">${officer}</option>`;
+        });
+    }
+
+    // --- Populate Groups based on Loan Officer ---
+    function populateGroups() {
+        let groups = JSON.parse(localStorage.getItem('Groups') || '[]');
+        const officer = document.getElementById('loan-officer').value;
+        const groupSelect = document.getElementById('group-name');
+        groupSelect.innerHTML = '<option value="">--Select Group--</option>';
+        groups.filter(g => g.loanOfficer === officer).forEach(group => {
+            groupSelect.innerHTML += `<option value="${group.name}">${group.name}</option>`;
+        });
+        // Reset members
+        document.getElementById('account-holder').innerHTML = '<option value="">--Select Member--</option>';
+    }
+
+    // --- Populate Members based on Group ---
+    function populateMembers() {
+        let members = JSON.parse(localStorage.getItem('Members') || '[]');
+        const group = document.getElementById('group-name').value;
+        const memberSelect = document.getElementById('account-holder');
+        memberSelect.innerHTML = '<option value="">--Select Member--</option>';
+        members.filter(m => m.group === group).forEach(member => {
+            memberSelect.innerHTML += `<option value="${member.fullName || member['Member Full Name']}">${member.fullName || member['Member Full Name']}</option>`;
+        });
+    }
+
+    document.getElementById('loan-officer').addEventListener('change', populateGroups);
+    document.getElementById('group-name').addEventListener('change', populateMembers);
+
+    window.onload = function() {
+        populateLoanOfficers();
+    };
+
+    // Helper to format date as ddmmyyyy
+    function formatDateDDMMYYYY(dateStr) {
+        const d = new Date(dateStr);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}${month}${year}`;
+    }
+
+    // --- Repayment Schedule Table (Flat Rate Calculation, with borders, overdues, penalties, advance) ---
+    function showRepaymentSchedule() {
+        const amount = parseFloat(document.getElementById('loan-amount').value);
+        const termMonths = parseInt(document.getElementById('loan-term').value);
+        const rate = parseFloat(document.getElementById('interest-rate').value);
+        const disbursement = document.getElementById('disbursement-date').value;
+        const instalmentType = document.getElementById('instalment-type').value;
+        const advanceInstalments = parseInt(document.getElementById('advance-instalments').value) || 0;
+        const penaltyRate = parseFloat(document.getElementById('penalty-rate').value) / 100 || 0.02;
+        const gracePeriodDays = 5; // Example: 5 days grace period
+
+        if (!amount || !termMonths || !rate || !disbursement || !instalmentType) {
+            alert("Please fill in loan amount, term, interest rate, disbursement date, and instalment type.");
+            return;
+        }
+
+        // Flat rate calculation
+        const totalInterest = amount * (rate / 100) * (termMonths / 12);
+        const totalPayment = amount + totalInterest;
+
+        let numInstalments, intervalDays, intervalLabel;
+        if (instalmentType === "monthly") {
+            numInstalments = termMonths;
+            intervalDays = 30;
+            intervalLabel = "Month";
+        } else {
+            numInstalments = termMonths * 4; // Approximate 4 weeks per month
+            intervalDays = 7;
+            intervalLabel = "Week";
+        }
+
+        const principalPerInstalment = Math.floor(amount / numInstalments);
+        const interestPerInstalment = Math.floor(totalInterest / numInstalments);
+        const instalmentAmount = principalPerInstalment + interestPerInstalment;
+
+        let schedule = [];
+        let payDate = new Date(disbursement);
+
+        let penalties = 0;
+        let advanceBalance = advanceInstalments;
+
+        for (let i = 1; i <= numInstalments; i++) {
+            let payDateStr = formatDateDDMMYYYY(payDate);
+
+            // Advance payment logic: if advanceBalance > 0, mark as paid in advance
+            let advance = "";
+            let overdueAmt = "";
+            let penalty = "";
+
+            if (advanceBalance > 0) {
+                advance = "Paid";
+                advanceBalance--;
+            } else {
+                // No automatic overdue/penalty. User can fill these in manually if needed.
+                overdueAmt = "";
+                penalty = "";
+            }
+
+            schedule.push({
+                date: payDateStr,
+                principal: principalPerInstalment,
+                interest: interestPerInstalment,
+                total: instalmentAmount,
+                overdue: overdueAmt,
+                penalty: penalty,
+                advance: advance
+            });
+
+            payDate.setDate(payDate.getDate() + intervalDays);
+        }
+
+        // Render table with borders and new columns
+        let html = `
+            <h3 style="color:#2d89ef;text-align:center;margin-top:32px;">Repayment Schedule (${intervalLabel}ly)</h3>
+            <table style="width:100%;margin-top:12px;border-collapse:collapse;text-align:center; border:2px solid #2d89ef;">
+                <thead>
+                    <tr style="background:#f6faff;">
+                        <th style="border:1px solid #2d89ef;">Payment Date</th>
+                        <th style="border:1px solid #2d89ef;">Principal</th>
+                        <th style="border:1px solid #2d89ef;">Interest</th>
+                        <th style="border:1px solid #2d89ef;">Principal + Interest</th>
+                        <th style="border:1px solid #2d89ef;">Overdue Amount</th>
+                        <th style="border:1px solid #2d89ef;">Penalty</th>
+                        <th style="border:1px solid #2d89ef;">Advance Payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${schedule.map(row => `
+                        <tr>
+                            <td style="border:1px solid #2d89ef;">${row.date}</td>
+                            <td style="border:1px solid #2d89ef;">${row.principal}</td>
+                            <td style="border:1px solid #2d89ef;">${row.interest}</td>
+                            <td style="border:1px solid #2d89ef;">${row.total}</td>
+                            <td style="border:1px solid #2d89ef;">${row.overdue || ""}</td>
+                            <td style="border:1px solid #2d89ef;">${row.penalty || ""}</td>
+                            <td style="border:1px solid #2d89ef;">${row.advance || ""}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+                <tfoot>
+                    <tr style="font-weight:bold;background:#ffe0b2;">
+                        <td style="border:1px solid #2d89ef;">Total</td>
+                        <td style="border:1px solid #2d89ef;">${amount.toFixed(2)}</td>
+                        <td style="border:1px solid #2d89ef;">${totalInterest.toFixed(2)}</td>
+                        <td style="border:1px solid #2d89ef;">${totalPayment.toFixed(2)}</td>
+                        <td style="border:1px solid #2d89ef;"></td>
+                        <td style="border:1px solid #2d89ef;">${penalties}</td>
+                        <td style="border:1px solid #2d89ef;"></td>
+                    </tr>
+                    <tr style="background:#f6faff;">
+                        <td colspan="3" style="border:1px solid #2d89ef;">Each Instalment</td>
+                        <td style="border:1px solid #2d89ef;">${instalmentAmount}</td>
+                        <td colspan="3" style="border:1px solid #2d89ef;"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        `;
+        document.getElementById('repayment-schedule-container').innerHTML = html;
+    }
+
+    // --- Loan Processing Fee Calculation ---
+    function updateProcessingFee() {
+        const amount = parseFloat(document.getElementById('loan-amount').value);
+        const feeBox = document.getElementById('loan-processing-fee-box');
+        const feeSpan = document.getElementById('processing-fee-amount');
+        if (amount && amount > 0) {
+            const fee = amount * 0.06;
+            feeSpan.textContent = fee.toFixed(2);
+            feeBox.style.display = 'block';
+        } else {
+            feeSpan.textContent = '0.00';
+            feeBox.style.display = 'none';
+        }
+    }
+
+    document.getElementById('loan-amount').addEventListener('input', updateProcessingFee);
+
+    // Prevent default form submission for demo
+    document.getElementById('add-loan-account-form').onsubmit = function(e) {
+        e.preventDefault();
+        alert('Loan account added!');
+        this.reset();
+        document.getElementById('repayment-schedule-container').innerHTML = '';
+        document.getElementById('loan-processing-fee-box').style.display = 'none';
+    };
+    </script>
+</body>
+</html>

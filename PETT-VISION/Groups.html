@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="groups.css">
+    <title>Groups</title>
+    <style>
+        tr.selected { background: #ffe0b2; }
+        #members-list { display: none; margin-top: 24px; }
+        #members-list ul { padding-left: 0; list-style: none; }
+    </style>
+</head>
+<body>
+    <h2>Groups</h2>
+    <label for="loan-officer-select" style="font-weight:bold;">Loan Officer:</label>
+    <select id="loan-officer-select" style="margin-bottom:18px;">
+        <option value="ALL">All Loan Officers</option>
+    </select>
+    <table border="1" style="width:100%; text-align:center;">
+        <thead>
+            <tr>
+                <th>Group Name</th>
+                <th>Date of Creation</th>
+                <th>Loan Officer</th>
+                <th>Location</th>
+                <th>Group Guarantor</th>
+            </tr>
+        </thead>
+        <tbody id="group-list"></tbody>
+    </table>
+    <button type="button" onclick="showMembersForSelectedGroup()">Refresh</button>
+
+    <div id="members-list"></div>
+
+    <script>
+    let selectedGroupName = null;
+
+    function formatDateOnly(dateStr) {
+        if (!dateStr) return '-';
+        const d = new Date(dateStr);
+        if (isNaN(d)) return dateStr.split('T')[0] || dateStr;
+        return d.toISOString().split('T')[0];
+    }
+
+    function populateLoanOfficerDropdown(groups) {
+        const select = document.getElementById('loan-officer-select');
+        // Get unique loan officers
+        const officers = Array.from(new Set(groups.map(g => g.loanOfficer).filter(Boolean)));
+        select.innerHTML = `<option value="ALL">All Loan Officers</option>` +
+            officers.map(o => `<option value="${o}">${o}</option>`).join('');
+    }
+
+    function loadGroups() {
+        let groups = JSON.parse(localStorage.getItem('Groups') || '[]');
+        populateLoanOfficerDropdown(groups);
+
+        const selectedOfficer = document.getElementById('loan-officer-select').value;
+        let filteredGroups = (selectedOfficer === "ALL")
+            ? groups
+            : groups.filter(g => g.loanOfficer === selectedOfficer);
+
+        let tbody = document.getElementById('group-list');
+        if (filteredGroups.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='5'>No groups found.</td></tr>";
+        } else {
+            tbody.innerHTML = filteredGroups.map(g => `
+                <tr data-group="${g.name}">
+                    <td>${g.name}</td>
+                    <td>${formatDateOnly(g.dateCreated)}</td>
+                    <td>${g.loanOfficer || '-'}</td>
+                    <td>${g.location || '-'}</td>
+                    <td>${g.groupGuarantor || '-'}</td>
+                </tr>
+            `).join('');
+        }
+        // Add click event to each row for selection
+        Array.from(tbody.querySelectorAll('tr')).forEach(row => {
+            row.onclick = function() {
+                Array.from(tbody.querySelectorAll('tr')).forEach(r => r.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedGroupName = this.getAttribute('data-group');
+                document.getElementById('members-list').style.display = 'none';
+            };
+        });
+    }
+
+    function showMembersForSelectedGroup() {
+        if (!selectedGroupName) {
+            alert("Please select a group first.");
+            return;
+        }
+        let members = JSON.parse(localStorage.getItem('Members') || '[]');
+        let groupMembers = members.filter(m => m.group === selectedGroupName);
+        let membersListDiv = document.getElementById('members-list');
+        if (groupMembers.length === 0) {
+            membersListDiv.innerHTML = `<h3>Members in "${selectedGroupName}"</h3><em>No members admitted yet.</em>`;
+        } else {
+            membersListDiv.innerHTML = `<h3>Members in "${selectedGroupName}"</h3>
+                <ul>
+                    ${groupMembers.map(m => 
+                        `<li>
+                            ${m.fullName || m['Member Full Name'] || m.email || m.idNumber}
+                            <br><small>Admitted: ${m.registrationDate || '-'}</small>
+                        </li>`
+                    ).join('')}
+                </ul>`;
+        }
+        membersListDiv.style.display = 'block';
+    }
+
+    // Reload groups when loan officer changes
+    document.addEventListener('DOMContentLoaded', function() {
+        loadGroups();
+        document.getElementById('loan-officer-select').addEventListener('change', loadGroups);
+    });
+    </script>
+    <a href="/">Back to Home</a>
+</body>
+</html>

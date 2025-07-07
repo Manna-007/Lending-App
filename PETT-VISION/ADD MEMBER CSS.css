@@ -1,0 +1,133 @@
+/* Center the form on the page */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: rgba(39, 39, 39, 0.4);
+}
+
+/* Style the form container */
+.dashboard-section {
+    background: rgba(255,255,255,0.97);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(45,137,239,0.10);
+    padding: 40px 30px;
+    min-width: 350px;
+    max-width: 900px;
+    width: 100%;
+}
+
+/* Style the heading */
+.dashboard-section h2 {
+    color: #2d89ef;
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.member-form-flex {
+    display: flex;
+    gap: 32px;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.member-fields, .guarantor-fields {
+    flex: 1 1 45%;
+    min-width: 220px;
+}
+
+.member-fields h3, .guarantor-fields h3 {
+    color: #ff9800;
+    margin-bottom: 12px;
+    font-size: 1.15rem;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.input-box {
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.input-box label {
+    min-width: 140px;
+    text-align: right;
+    margin-right: 12px;
+    font-weight: 600;
+    color: #2d89ef;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+}
+
+.input-field, .input-box select {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 24px;
+    border: 2px solid #2d89ef;
+    font-size: 1rem;
+    background: #f6faff;
+    color: #222;
+    outline: none;
+    transition: border 0.2s;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+.input-field:focus, .input-box select:focus {
+    border: 2px solid #ff9800;
+    background: #fff;
+}
+
+.input-box select option {
+    color: #2d89ef;
+    background: #fff;
+    font-weight: 500;
+}
+
+.form-submit-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.submit {
+    width: 200px;
+    padding: 12px;
+    background: #2d89ef;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+.submit:hover {
+    background: #ff9800;
+    color: #fff;
+}
+
+@media (max-width: 900px) {
+    .member-form-flex {
+        flex-direction: column;
+        gap: 0;
+    }
+    .member-fields, .guarantor-fields {
+        min-width: 100%;
+    }
+    .input-box label {
+        min-width: 110px;
+        font-size: 0.98rem;
+    }
+}

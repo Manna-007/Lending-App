@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Group</title>
+    <link rel="stylesheet" href="add-group.css">
+</head>
+<body>
+      <h1>Add Group</h1>
+  <div class="form-container">
+    <form action="/add-group" method="POST">
+        <div class="date-of-creation">
+            <label for="date-of-creation">Date of Creation:</label>
+            <input type="date" id="date-of-creation" name="date-of-creation" required>
+        </div>
+        <div class="input-box">
+            <label for="group-name">Group Name:</label>
+            <input type="text" id="group-name" placeholder="Enter group name" required>
+        </div>
+        <div class="input-box">
+            <label for="loan-officer">Loan Officer:</label>
+            <select id="loan-officer" required>
+                <option value="">Select Loan Officer</option>
+                <!-- Options will be populated by JS -->
+            </select>
+        </div>
+        <div class="input-box">
+            <label for="group-guarantor">Group Guarantor:</label>
+            <input type="text" id="group-guarantor" placeholder="Group Guarantor" required>
+        </div>
+        <div class="input-box">
+            <label for="location">Location:</label>
+            <input type="text" id="location" placeholder="Location" required>
+        </div>
+        <div class="input-box">
+            <label for="group-description">Group Description:</label>
+            <textarea id="group-description" placeholder="Enter group description"></textarea>
+        </div>
+        <button type="button" onclick="saveGroup()">Add Group</button>
+    </form>
+    <br>
+    <a href="/">Back to Home</a>
+  </div>
+  <script>
+function populateLoanOfficers() {
+    // Example: get unique loan officers from existing groups
+    let groups = JSON.parse(localStorage.getItem('Groups') || '[]');
+    let officers = Array.from(new Set(groups.map(g => g.loanOfficer).filter(Boolean)));
+    const select = document.getElementById('loan-officer');
+    select.innerHTML = '<option value="">Select Loan Officer</option>';
+    officers.forEach(officer => {
+        select.innerHTML += `<option value="${officer}">${officer}</option>`;
+    });
+}
+
+function saveGroup() {
+    const groupName = document.getElementById('group-name').value.trim();
+    const loanOfficer = document.getElementById('loan-officer').value.trim();
+    const location = document.getElementById('location').value.trim();
+    const groupGuarantor = document.getElementById('group-guarantor').value.trim();
+    const dateCreated = document.getElementById('date-of-creation').value;
+    const groupDescription = document.getElementById('group-description').value.trim();
+
+    if (!groupName || !loanOfficer || !location || !groupGuarantor || !dateCreated) {
+        alert("Please fill all fields.");
+        return;
+    }
+
+    let groups = JSON.parse(localStorage.getItem('Groups') || '[]');
+    groups.push({
+        name: groupName,
+        loanOfficer: loanOfficer,
+        location: location,
+        groupGuarantor: groupGuarantor,
+        dateCreated: dateCreated,
+        description: groupDescription
+    });
+    localStorage.setItem('Groups', JSON.stringify(groups));
+    alert("Group saved!");
+}
+
+// Populate loan officers on page load
+window.onload = populateLoanOfficers;
+</script>
+</body>
+</html>

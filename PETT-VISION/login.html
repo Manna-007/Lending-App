@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="login.css">
+    <title>Pett Vision | Login & Registration</title>
+</head>
+<body>
+ <div class="wrapper">
+    <div class="nav-logo">
+        <!-- Pett Vision logo -->
+        <p>
+            <span class="logo-blue animate-logo">Pett</span>
+            <span class="logo-orange animate-logo" style="margin-left:12px;">Vision</span>
+        </p>
+    </div>
+    <nav class="nav">
+        <div class="nav-button">
+            <button class="btn white-btn" id="loginBtn" onclick="showLogin()">Sign In</button>
+            <button class="btn" id="registerBtn" onclick="showRegister()">Sign Up</button>
+        </div>
+        <div class="nav-menu-btn">
+            <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+        </div>
+    </nav>
+
+    <!-- Place the logo above the form box, outside of it -->
+    <div class="form-box">
+        
+        <!------------------- login form -------------------------->
+
+        <div class="login-container" id="login">
+            <div class="top">
+                <span>Don't have an account? <a href="#" onclick="showRegister()">Sign Up</a></span>
+                <header>Login</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Username or Email">
+                <i class="bx bx-user"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="input-box">
+                <button type="button" class="submit" onclick="handleLogin()">Sign In</button>
+            </div>
+            <div class="two-col">
+                <div class="one">
+                    <input type="checkbox" id="login-check">
+                    <label for="login-check"> Remember Me</label>
+                </div>
+                <div class="two">
+                    <label><a href="#" onclick="showForgot()">Forgot password?</a></label>
+                </div>
+            </div>
+        </div>
+
+        <!------------------- registration form -------------------------->
+        <div class="register-container" id="register">
+            <div class="top">
+                <span>Have an account? <a href="#" onclick="showLogin()">Login</a></span>
+                <header>Sign Up</header>
+            </div>
+            <div class="two-forms">
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Firstname">
+                    <i class="bx bx-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Lastname">
+                    <i class="bx bx-user"></i>
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email">
+                <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="input-box">
+                <button type="button" class="submit" onclick="handleRegister()">Register</button>
+            </div>
+            <div class="two-col">
+                <div class="one">
+                    <input type="checkbox" id="register-check">
+                    <label for="register-check"> Remember Me</label>
+                </div>
+                <div class="two">
+                    <label><a href="#">Terms & conditions</a></label>
+                </div>
+            </div>
+        </div>
+
+        <!------------------- forgot password form -------------------------->
+        <div class="forgot-container" id="forgot">
+            <div class="top">
+                <span>Remembered? <a href="#" onclick="showLogin()">Login</a></span>
+                <header>Reset Password</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email">
+                <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="New Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Confirm Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="input-box">
+                <button type="button" class="submit" onclick="handleReset()">Reset Password</button>
+            </div>
+        </div>
+    </div>
+</div>   
+
+
+<script>
+   
+   function myMenuFunction() {
+    var i = document.getElementById("navMenu");
+
+    if(i.className === "nav-menu") {
+        i.className += " responsive";
+    } else {
+        i.className = "nav-menu";
+    }
+   }
+ 
+</script>
+
+<script>
+
+    var a = document.getElementById("loginBtn");
+    var b = document.getElementById("registerBtn");
+    var x = document.getElementById("login");
+    var y = document.getElementById("register");
+
+    function login() {
+        x.style.left = "4px";
+        y.style.right = "-520px";
+        a.className += " white-btn";
+        b.className = "btn";
+        x.style.opacity = 1;
+        y.style.opacity = 0;
+    }
+
+    function register() {
+        x.style.left = "-510px";
+        y.style.right = "5px";
+        a.className = "btn";
+        b.className += " white-btn";
+        x.style.opacity = 0;
+        y.style.opacity = 1;
+    }
+
+</script>
+
+<script>
+function handleRegister() {
+    const email = document.querySelector('#register input[placeholder="Email"]').value.trim();
+    const password = document.querySelector('#register input[placeholder="Password"]').value;
+    const firstname = document.querySelector('#register input[placeholder="Firstname"]').value.trim();
+    const lastname = document.querySelector('#register input[placeholder="Lastname"]').value.trim();
+
+    // Simple email validation regex
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!firstname || !lastname) {
+        alert("Please enter your first and last name.");
+        return;
+    }
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+    if (!password) {
+        alert("Please enter a password.");
+        return;
+    }
+
+    // TODO: Add your registration logic here (e.g., save user info)
+    showLogin(); // This will slide to the login form
+    alert("Registration successful! Please log in.");
+}
+
+function handleLogin() {
+    // Example: Get entered credentials
+    const username = document.querySelector('#login input[placeholder="Username or Email"]').value;
+    const password = document.querySelector('#login input[placeholder="Password"]').value;
+
+    // TODO: Replace this with your actual validation logic
+    if (username && password) {
+        // Set login flag
+        localStorage.setItem('isLoggedIn', 'true');
+        window.location.href = "home.html";
+    } else {
+        alert("Please enter valid credentials.");
+    }
+}
+
+function handleReset() {
+    const email = document.querySelector('#forgot input[placeholder="Email"]').value.trim();
+    const newPassword = document.querySelector('#forgot input[placeholder="New Password"]').value;
+    const confirmPassword = document.querySelector('#forgot input[placeholder="Confirm Password"]').value;
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+    if (!newPassword || !confirmPassword) {
+        alert("Please enter and confirm your new password.");
+        return;
+    }
+    if (newPassword !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+    }
+
+    // TODO: Add your password reset logic here
+    alert("Password reset successful! Please log in with your new password.");
+    showLogin();
+}
+</script>
+
+<script>
+    function showLogin() {
+        document.getElementById("login").classList.add("active");
+        document.getElementById("register").classList.remove("active");
+        document.getElementById("forgot").classList.remove("active");
+        document.getElementById("loginBtn").classList.add("white-btn");
+        document.getElementById("registerBtn").classList.remove("white-btn");
+    }
+
+    function showRegister() {
+        document.getElementById("login").classList.remove("active");
+        document.getElementById("register").classList.add("active");
+        document.getElementById("forgot").classList.remove("active");
+        document.getElementById("loginBtn").classList.remove("white-btn");
+        document.getElementById("registerBtn").classList.add("white-btn");
+    }
+
+    function showForgot() {
+        document.getElementById("login").classList.remove("active");
+        document.getElementById("register").classList.remove("active");
+        document.getElementById("forgot").classList.add("active");
+        document.getElementById("loginBtn").classList.remove("white-btn");
+        document.getElementById("registerBtn").classList.remove("white-btn");
+    }
+
+    // Set initial state
+    window.onload = showLogin;
+</script>
+
+</body>
+</html>

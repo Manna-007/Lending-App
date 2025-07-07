@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: url('Pett\ LOGO.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    margin: 0 auto;
+    padding: 0 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 auto;
+}
+
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 32px; /* Increased space below logo */
+}
+
+.logo p {
+    margin: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.blue {
+    color: #2d89ef; /* Blue */
+    font-weight: bold;
+    display: flex;
+}
+
+.orange {
+    color: #ff9800; /* Orange */
+    font-weight: bold;
+    display: flex;
+}
+
+/* Animate PETT */
+.animate-pett {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+}
+
+/* Animate VISION after PETT */
+.animate-vision {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s ease-out 0.7s forwards;
+}
+
+/* Animate username typing effect */
+.animate-username {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    font-weight: bold;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes blink-cursor {
+    0%, 100% { border-color: #2d89ef; }
+    50% { border-color: transparent; }
+}
+
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 100;
+    background: rgba(255,255,255,0.85); /* White with 85% opacity */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 24px;
+    padding-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(45,137,239,0.07);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: #222;
+    /* Optionally, add margin-top here instead of/in addition to logo's margin-bottom */
+    /* margin-top: 32px; */
+}
+
+.user-info i {
+    margin-right: 8px;
+    color: #2d89ef;
+}
+
+.dashboard-content {
+    margin-top: 1px;
+}
+
+.dashboard-menu {
+    margin-top: 160px; /* Adjust so menu starts below the header */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 10vw; /* Center left, adjust as needed */
+    min-width: 220px;
+    background: rgba(255,255,255,0.85); /* White with 85% opacity */
+    box-shadow: 0 2px 8px rgba(45,137,239,0.07);
+}
+
+.menu-columns {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    /* Remove margin-top here */
+}
+
+.menu-left, .menu-right {
+    margin-top: 0px; /* Bigger space above links */
+    flex: 1;           /* Allow columns to grow equally */
+    list-style: none;
+    padding: 16px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 140px; /* Ensure columns are wide enough for links */
+    background: none;
+}
+
+.menu-logout {
+    display: flex;
+    justify-content: center;
+    margin-top: 0 0 0 auto; /* Center logout button */
+    padding: 0 10px;
+    background: none;
+}
+
+.dashboard-menu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;              /* Less space between items */
+    margin: 0;
+    padding: 0 10px;
+}
+
+.dashboard-menu li {
+    margin: 0;
+}
+
+.dashboard-menu .link {
+    color: #2d89ef;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+    display: block;
+    width: 100%;
+    font-size: 0.95rem;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+}
+
+.dashboard-menu .link.active,
+.dashboard-menu .link:hover,
+.logout-btn.link:hover {
+    background: #ff9800;
+    color: #fff;
+}
+
+.animate-pett,
+.animate-vision {
+    opacity: 0;
+    animation: fadeInLogo 1.2s ease-out forwards;
+}
+
+.animate-vision {
+    animation-delay: 0.5s; /* VISION fades in after PETT */
+}
+
+@keyframes fadeInLogo {
+    to {
+        opacity: 1;
+    }
+}
+
+.logout-btn {
+    display: block;
+    margin: 0 auto 16 auto;
+    background: #2d89ef;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.logout-btn:hover {
+    background: #ff9800;
+}
+.logout-btn.link {
+    background: none;
+    border: none;
+    color: #2d89ef;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    width: 100%;
+    text-align: center;
+}
+
+.logout-btn.link:hover {
+    background: #ff9800;
+    color: #fff;
+}
+.dashboard-footer {
+    flex-shrink: 0;
+    margin-top: 40px;
+    text-align: center;
+    color: #555;
+    font-size: 0.95rem;
+    background: rgba(255,255,255,0.85);
+    padding: 16px 0 8px 0;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    bottom: 0;
+    left: 0;
+}

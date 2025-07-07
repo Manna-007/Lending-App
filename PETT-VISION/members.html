@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members</title>
+</head>
+<body>
+    <h2>Registered Members</h2>
+    <table border="1" style="width:100%; text-align:center;">
+        <thead>
+            <tr>
+                <th colspan="7">Member Information</th>
+                <th colspan="6">Guarantor Information</th>
+            </tr>
+            <tr>
+                <th>Full Name</th>
+                <th>ID Number</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Full Name</th>
+                <th>ID Number</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody id="members-list"></tbody>
+    </table>
+    <script>
+    function loadMembers() {
+        let members = JSON.parse(localStorage.getItem('Members') || '[]');
+        let tbody = document.getElementById('members-list');
+        if (members.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='13'>No members found.</td></tr>";
+        } else {
+            tbody.innerHTML = members.map(m => `
+                <tr>
+                    <td>${m.fullName || ''}</td>
+                    <td>${m.idNumber || ''}</td>
+                    <td>${m.dob || ''}</td>
+                    <td>${m.gender || ''}</td>
+                    <td>${m.email || ''}</td>
+                    <td>${m.phone || ''}</td>
+                    <td>${m.address || ''}</td>
+                    <td>${m.guarantorName || ''}</td>
+                    <td>${m.guarantorId || ''}</td>
+                    <td>${m.guarantorDob || ''}</td>
+                    <td>${m.guarantorGender || ''}</td>
+                    <td>${m.guarantorEmail || ''}</td>
+                    <td>${m.guarantorPhone || ''}</td>
+                    <td>${m.guarantorAddress || ''}</td>
+                </tr>
+            `).join('');
+        }
+    }
+    window.onload = loadMembers;
+    </script>
+</body>
+</html>

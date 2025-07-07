@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href="home.css">
+    <title>PETT VISION</title>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Header Section -->
+        <header class="main-header">
+            <div class="logo">
+                <p>
+                    <span class="blue animate-pett">PETT</span>
+                    <span class="orange animate-vision">VISION</span>
+                </p>
+            </div>
+            <div class="user-info">
+                <i class='bx bx-user'></i>
+                <span id="username" class="animate-username"></span>
+            </div>
+        </header>
+
+        <!-- Dashboard Menu directly below header -->
+        <div class="dashboard-menu">
+            <div class="menu-columns">
+                <ul class="menu-left">
+                    <li><a href="Home" class="link active">Home</a></li>
+                    <li><a href="members.html" class="link">Member</a></li>
+                    <li><a href="add-member.html" class="link">Add New Member</a></li>
+                    <li><a href="loan account.html" class="link">Loan Account</a></li>
+                    <li><a href="add loan account.html" class="link">Add Loan Account</a></li>
+                    <li><a href="Transactions" class="link">Transactions</a></li>
+                </ul>
+                <ul class="menu-right">
+                     <li><a href="loan repayments.html" class="link">Loan Repayment</a></li>
+                    <li><a href="Loan Repayment Schedule.html" class="link">Loan Repayment Schedule</a></li>
+                    <li><a href="disbursements.html" class="link">Disbursements</a></li>
+                    <li><a href="Groups.html" class="link">Groups</a></li>
+                    <li><a href="add-group.html" class="link">Add Group</a></li>
+                    <li><a href="Daily Report" class="link">Daily Report</a></li>
+                </ul>
+            </div>
+            <div class="menu-logout">
+                <button onclick="logout()" class="logout-btn link">Log Out</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Content (if you have any main content) -->
+        <div class="dashboard-content">
+            <!-- ...your dashboard content here... -->
+        </div>
+    </div>
+    <!-- Footer Section -->
+    <div class="dashboard-footer">
+        <p>2025 PETT VISION. All rights reserved.</p>
+        <p>Powered by <a href="Shalom Technologies" target="_blank">Shalom Technologies</a></p>
+    </div>
+
+    <script>
+    // Redirect to login if not logged in
+    if (!localStorage.getItem('isLoggedIn')) {
+        window.location.href = "login.html";
+    }
+
+    // Typing effect for username
+    window.onload = function() {
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const username = user && user.username ? user.username : "Loan Officer";
+        const el = document.getElementById('username');
+        let i = 0;
+        el.textContent = ""; // Clear first
+
+        function type() {
+            if (i < username.length) {
+                el.textContent += username.charAt(i);
+                i++;
+                setTimeout(type, 90); // typing speed in ms
+            }
+        }
+        type();
+    };
+
+    // Log out function
+    function logout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('loggedInUser');
+        window.location.href = "login.html";
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="add loan account.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add Loan Account</title>
+</head>
+<body>
+    <div class="loan-account-container">
+        <h1>PETT VISION</h1>
+        <form id="add-loan-account-form">
+            <label for="loan-account-date">Date of Loan Account:</label>
+            <input type="date" id="loan-account-date" name="loan-account-date" required>
+
+            <label for="loan-officer">Loan Officer:</label>
+            <select id="loan-officer" name="loan-officer" required>
+                <option value="">--Please choose an option--</option>
+                <option value="officer1">Loan Officer 1</option>
+                <option value="officer2">Loan Officer 2</option>
+                <option value="officer3">Loan Officer 3</option>
+            </select>
+
+            <label for="loan-type">Loan Type:</label>
+            <select id="loan-type" name="loan-type" required>
+                <option value="">--Please choose an option--</option>
+                <option value="small-loan">Small Loan</option>
+                <option value="small-business-loan">Small Business Loan</option>
+            </select>
+
+            <label for="group-name">Group Name:</label>
+            <select id="group-name" name="group-name" required>
+                <option value="">--Please choose an option--</option>
+                <option value="group1">Group 1</option>
+                <option value="group2">Group 2</option>
+                <option value="group3">Group 3</option>
+            </select>
+
+            <label for="member-name">Member Name:</label>
+            <select id="member-name" name="member-name" required>
+                <option value="">--Please choose an option--</option>
+                <option value="member1">Member 1</option>
+                <option value="member2">Member 2</option>
+                <option value="member3">Member 3</option>
+            </select>
+
+            <label for="loan-amount">Loan Amount:</label>
+            <input type="number" id="loan-amount" name="loan-amount" required>
+
+            <label for="interest-rate">Interest Rate (%):</label>
+            <input type="number" id="interest-rate" name="interest-rate" step="0.01" required readonly>
+
+            <label for="loan-duration">Loan Duration (months):</label>
+            <select name="loan-duration" id="loan-duration" required>
+                <option value="">--Please choose an option--</option>
+                <!-- Options will be filled by JS -->
+            </select>
+
+            <label for="repayment-schedule">Repayment Schedule:</label>
+            <select id="repayment-schedule" name="repayment-schedule" required>
+                <option value="">--Please choose an option--</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="semi-annually">Semi-Annually</option>
+            </select>
+
+            <label for="loan-processing-fees">Loan Processing Fees</label>
+            <input type="number" id="loan-processing-fees" name="loan-processing-fees" min="0" step="0.01" readonly required>
+            <label for="loan-verification-fees">Loan Verification Fees</label>
+            <input type="number" id="loan-verification-fees" name="loan-verification-fees" min="0" step="0.01" readonly required>
+
+            <label for="weekly-instalment">Weekly Instalment</label>
+            <input type="number" id="weekly-instalment" name="weekly-instalment" readonly>
+
+            <!-- Add other fields as needed -->
+
+            <button type="submit">Add Loan Account</button>
+        </form>
+
+        <div id="loan-accounts-tables"></div>
+    </div>
+
+    <script>
+    // Populate loan duration dropdown (1-24 months)
+    const durationSelect = document.getElementById('loan-duration');
+    for (let i = 1; i <= 24; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `${i} month${i > 1 ? 's' : ''}`;
+        durationSelect.appendChild(option);
+    }
+
+    // Auto-set duration and disable for specific loan types
+    document.getElementById('loan-type').addEventListener('change', function() {
+        const loanType = this.value;
+        if (loanType === 'small-loan') {
+            durationSelect.value = 6; // 6 months
+            durationSelect.disabled = true;
+        } else if (loanType === 'small-business-loan') {
+            durationSelect.value = 5; // 5 months
+            durationSelect.disabled = true;
+        } else {
+            durationSelect.disabled = false;
+            durationSelect.value = '';
+        }
+        updateFees();
+    });
+    document.getElementById('add-loan-account-form').addEventListener('reset', function() {
+        durationSelect.disabled = false;
+    });
+
+    // Fee calculation
+    function updateFees() {
+        const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
+        const loanType = document.getElementById('loan-type').value;
+
+        let processingRate = 0.038;
+        let verificationRate = 0.017;
+
+        if (loanType === 'small-business-loan') {
+            processingRate = 0.045;
+            verificationRate = 0.02;
+        } else if (loanType === 'small-loan') {
+            processingRate = 0.038;
+            verificationRate = 0.017;
+        }
+
+        document.getElementById('loan-processing-fees').value = (amount * processingRate).toFixed(2);
+        document.getElementById('loan-verification-fees').value = (amount * verificationRate).toFixed(2);
+    }
+    document.getElementById('loan-amount').addEventListener('input', updateFees);
+    document.getElementById('loan-type').addEventListener('change', updateFees);
+
+    // Interest rate update function
+    function updateInterestRate() {
+        const loanType = document.getElementById('loan-type').value;
+        const repayment = document.getElementById('repayment-schedule').value;
+        const duration = parseInt(document.getElementById('loan-duration').value) || 0;
+        const interestInput = document.getElementById('interest-rate');
+
+        let rate = '';
+
+        if (loanType === 'small-loan' && repayment === 'weekly') {
+            if (duration === 6) {
+                rate = 15;
+            } else if (duration === 12) {
+                rate = 30;
+            }
+        } else if (loanType === 'small-business-loan' && repayment === 'weekly') {
+            if (duration === 5) {
+                rate = 12.5;
+            } else if (duration === 10) {
+                rate = 25;
+            }
+        } else if (loanType === 'small-loan') {
+            // fallback for other schedules
+            rate = 30;
+        } else if (loanType === 'small-business-loan') {
+            rate = 25;
+        }
+
+        interestInput.value = rate;
+    }
+
+    // Attach event listeners for interest rate update
+    document.getElementById('loan-type').addEventListener('change', updateInterestRate);
+    document.getElementById('repayment-schedule').addEventListener('change', updateInterestRate);
+    document.getElementById('loan-duration').addEventListener('change', updateInterestRate);
+
+    // Weekly instalment update function
+    function updateWeeklyInstalment() {
+        const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
+        const duration = parseInt(document.getElementById('loan-duration').value) || 0;
+        const repayment = document.getElementById('repayment-schedule').value;
+        let weeks = 0;
+
+        // Set weeks based on loan type
+        const loanType = document.getElementById('loan-type').value;
+        if (loanType === 'small-loan') {
+            weeks = 25;
+        } else if (loanType === 'small-business-loan') {
+            weeks = 20;
+        } else if (repayment === 'weekly' && duration > 0) {
+            weeks = duration * 4; // Approximate weeks in duration
+        }
+
+        let instalment = 0;
+        if (repayment === 'weekly' && weeks > 0) {
+            instalment = Math.ceil(amount / weeks); // Round up to nearest whole number
+        }
+
+        document.getElementById('weekly-instalment').value = instalment > 0 ? instalment : '';
+    }
+
+    // Update weekly instalment when relevant fields change
+    document.getElementById('loan-amount').addEventListener('input', updateWeeklyInstalment);
+    document.getElementById('loan-type').addEventListener('change', updateWeeklyInstalment);
+    document.getElementById('loan-duration').addEventListener('change', updateWeeklyInstalment);
+    document.getElementById('repayment-schedule').addEventListener('change', updateWeeklyInstalment);
+
+    // Form submission
+    document.getElementById('add-loan-account-form').onsubmit = function(e) {
+    e.preventDefault();
+
+    const loanAccount = {
+        date: document.getElementById('loan-account-date').value,
+        officer: document.getElementById('loan-officer').value,
+        loanType: document.getElementById('loan-type').value,
+        group: document.getElementById('group-name').value,
+        member: document.getElementById('member-name').value,
+        amount: document.getElementById('loan-amount').value,
+        interest: document.getElementById('interest-rate').value,
+        duration: document.getElementById('loan-duration').value,
+        repayment: document.getElementById('repayment-schedule').value,
+        processingFees: document.getElementById('loan-processing-fees').value,
+        verificationFees: document.getElementById('loan-verification-fees').value,
+        weeklyInstalment: document.getElementById('weekly-instalment').value
+    };
+
+    // Save to LoanAccounts (for loan accounts page)
+    let accounts = JSON.parse(localStorage.getItem('LoanAccounts') || '[]');
+    accounts.push(loanAccount);
+    localStorage.setItem('LoanAccounts', JSON.stringify(accounts));
+
+    // Save to Disbursements (for disbursements page)
+    let disb = JSON.parse(localStorage.getItem('Disbursements') || '[]');
+    disb.push(loanAccount);
+    localStorage.setItem('Disbursements', JSON.stringify(disb));
+
+    // Save to DailyReports (for daily reports page)
+    let reports = JSON.parse(localStorage.getItem('DailyReports') || '[]');
+    reports.push(loanAccount);
+    localStorage.setItem('DailyReports', JSON.stringify(reports));
+
+    alert('Loan account added!');
+    this.reset();
+    updateFees();
+    loadLoanAccounts(); // Refresh the tables
+};
+
+    function loadLoanAccounts() {
+        let accounts = JSON.parse(localStorage.getItem('LoanAccounts') || '[]');
+        let container = document.getElementById('loan-accounts-tables');
+        if (!container) return;
+        if (accounts.length === 0) {
+            container.innerHTML = "<p>No loan accounts found.</p>";
+        } else {
+            // Show only the most recently added account
+            let acc = accounts[accounts.length - 1];
+            container.innerHTML = `
+                <table border="1" style="width:100%; text-align:center; margin-bottom:2em;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Loan Officer</th>
+                            <th>Loan Type</th>
+                            <th>Group Name</th>
+                            <th>Member Name</th>
+                            <th>Loan Amount</th>
+                            <th>Interest Rate (%)</th>
+                            <th>Interest Amount</th>
+                            <th>Duration (months)</th>
+                            <th>Repayment Schedule</th>
+                            <th>Processing Fees</th>
+                            <th>Verification Fees</th>
+                            <th>Weekly Instalment</th>
+                            <th>Instalment Date</th>
+                            <th>Instalment Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>${acc.date || ''}</td>
+                            <td>${acc.officer || ''}</td>
+                            <td>${acc.loanType || ''}</td>
+                            <td>${acc.group || ''}</td>
+                            <td>${acc.member || ''}</td>
+                            <td>${acc.amount || ''}</td>
+                            <td>${acc.interest || ''}</td>
+                            <td>${acc.duration || ''}</td>
+                            <td>${acc.repayment || ''}</td>
+                            <td>${acc.processingFees || ''}</td>
+                            <td>${acc.verificationFees || ''}</td>
+                            <td>${acc.weeklyInstalment || ''}</td>
+                            <td>${interestAmount}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+    }
+    window.onload = loadLoanAccounts;
+
+    // Function to update the preview table with current form values
+function updateCurrentLoanTable() {
+    const acc = {
+        date: document.getElementById('loan-account-date').value,
+        officer: document.getElementById('loan-officer').value,
+        loanType: document.getElementById('loan-type').value,
+        group: document.getElementById('group-name').value,
+        member: document.getElementById('member-name').value,
+        amount: document.getElementById('loan-amount').value,
+        interest: document.getElementById('interest-rate').value,
+        duration: document.getElementById('loan-duration').value,
+        repayment: document.getElementById('repayment-schedule').value
+    };
+
+    // Calculate number of weeks
+    let weeks = 0;
+    if (acc.loanType === 'small-loan') {
+        weeks = 25;
+    } else if (acc.loanType === 'small-business-loan') {
+        weeks = 20;
+    } else if (acc.repayment === 'weekly' && acc.duration) {
+        weeks = parseInt(acc.duration) * 4;
+    }
+
+    // Calculate interest amount and total instalment amount
+    const principal = parseFloat(acc.amount) || 0;
+    const rate = parseFloat(acc.interest) || 0;
+    const interestAmount = ((principal * rate) / 100);
+    const totalToPay = principal + interestAmount;
+    let instalmentAmount = '';
+    let instalmentRows = '';
+
+    if (weeks > 0 && acc.date && acc.repayment === 'weekly') {
+        let currentDate = new Date(acc.date);
+        currentDate.setDate(currentDate.getDate() + 7); // First instalment is one week after disbursement
+        let regularInstalment = Math.ceil(totalToPay / weeks);
+        let paidSoFar = 0;
+
+        for (let i = 0; i < weeks; i++) {
+            // For the last instalment, pay the exact remaining balance
+            let thisInstalment;
+            if (i === weeks - 1) {
+                thisInstalment = (totalToPay - paidSoFar).toFixed(2);
+            } else {
+                thisInstalment = regularInstalment;
+                paidSoFar += regularInstalment;
+            }
+
+            // Format date as YYYY-MM-DD
+            let d = new Date(currentDate);
+            let yyyy = d.getFullYear();
+            let mm = String(d.getMonth() + 1).padStart(2, '0');
+            let dd = String(d.getDate()).padStart(2, '0');
+            let dateStr = `${yyyy}-${mm}-${dd}`;
+            instalmentRows += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${acc.date || ''}</td>
+                    <td>${acc.officer || ''}</td>
+                    <td>${acc.loanType || ''}</td>
+                    <td>${acc.group || ''}</td>
+                    <td>${acc.member || ''}</td>
+                    <td>${acc.amount || ''}</td>
+                    <td>${acc.interest || ''}</td>
+                    <td>${interestAmount.toFixed(2)}</td>
+                    <td>${acc.duration || ''}</td>
+                    <td>${acc.repayment || ''}</td>
+                    <td>${dateStr}</td>
+                    <td>${thisInstalment}</td>
+                </tr>`;
+            currentDate.setDate(currentDate.getDate() + 7);
+        }
+    } else {
+        // Show a single row if not weekly or not enough info
+        instalmentRows = `
+            <tr>
+                <td>1</td>
+                <td>${acc.date || ''}</td>
+                <td>${acc.officer || ''}</td>
+                <td>${acc.loanType || ''}</td>
+                <td>${acc.group || ''}</td>
+                <td>${acc.member || ''}</td>
+                <td>${acc.amount || ''}</td>
+                <td>${acc.interest || ''}</td>
+                <td>${interestAmount.toFixed(2)}</td>
+                <td>${acc.duration || ''}</td>
+                <td>${acc.repayment || ''}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        `;
+    }
+
+    let container = document.getElementById('loan-accounts-tables');
+    container.innerHTML = `
+        <table border="1" style="width:100%; text-align:center; margin-bottom:2em;">
+            <thead>
+                <tr>
+                    <th>Instalment #</th>
+                    <th>Disbursement Date</th>
+                    <th>Loan Officer</th>
+                    <th>Loan Type</th>
+                    <th>Group Name</th>
+                    <th>Member Name</th>
+                    <th>Loan Amount</th>
+                    <th>Interest Rate (%)</th>
+                    <th>Interest Amount</th>
+                    <th>Duration (months)</th>
+                    <th>Repayment Schedule</th>
+                    <th>Instalment Date</th>
+                    <th>Instalment Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${instalmentRows}
+            </tbody>
+        </table>
+    `;
+}
+
+// Attach event listeners to all relevant fields to update the table live
+[
+    'loan-account-date',
+    'loan-officer',
+    'loan-type',
+    'group-name',
+    'member-name',
+    'loan-amount',
+    'interest-rate',
+    'loan-duration',
+    'repayment-schedule',
+    'loan-processing-fees',
+    'loan-verification-fees',
+    'weekly-instalment'
+].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('change', updateCurrentLoanTable);
+        el.addEventListener('input', updateCurrentLoanTable);
+    }
+});
+
+// Also update the table on page load
+updateCurrentLoanTable();
+
+// On form reset, clear the table
+document.getElementById('add-loan-account-form').addEventListener('reset', function() {
+    setTimeout(updateCurrentLoanTable, 0);
+});
+    </script>
+</body>
+</html>

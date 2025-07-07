@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Repayments</title>
+</head>
+<body>
+    <h1>Loan Repayments</h1>
+
+    <div class="input-box">
+        <label for="repayment-date">Date of Repayment</label>
+        <input type="date" class="input-field" placeholder="DD-MM-YYYY" id="repayment-date" required>
+    </div>
+    <legend>Loan Officer</legend>
+    <label for="loan-officer">Select Loan Officer:</label>
+    <select name="loan-officer" id="" class="loan-officer">
+        <option value="officer1">Officer 1</option>
+        <option value="officer2">Officer 2</option>
+        <option value="officer3">Officer 3</option>
+    </select>
+    <legend>Loan Type</legend>
+    <label for="loan-type">Select Loan Type:</label>
+    <select name="loan-type" id="" class="loan-type">
+        <option value="personal">Small Loan</option>
+        <option value="home">Small Business Loan</option>
+    </select>
+    <legend>Group and Member</legend>
+    <label for="group-name">Select Group Name:</label>
+    <select name="group-name" id="" class="group-name">
+        <option value="group1">Group 1</option>
+        <option value="group2">Group 2</option>
+        <option value="group3">Group 3</option>
+    </select>
+    <legend>Member Name</legend>
+    <label for="member-name">Select Member Name:</label>
+    <select name="member-name" id="member-name">
+        <option value="member1">Member 1</option>
+        <option value="member2">Member 2</option>
+        <option value="member3">Member 3</option>
+        <option value="member4">Member 4</option>
+        <option value="member5">Member 5</option>
+        <option value="member6">Member 6</option>
+        <option value="member7">Member 7</option>
+    </select>
+    <div class="input-box">
+        <label for="repayment-amount">Repayment Amount</label>
+        <input type="number" class="input-field" placeholder="Enter Repayment Amount" id="repayment-amount" required>
+    </div>
+    <button type="submit" class="submit-button">Submit Repayment</button>
+
+    <script src="loan-repayments.js"></script>
+</body>
+</html>

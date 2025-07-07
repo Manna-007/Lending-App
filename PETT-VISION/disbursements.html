@@ -1,0 +1,131 @@
+<body>
+    <h2>Loan Accounts for Disbursement</h2>
+    <input type="text" id="filter-input" placeholder="Filter by Member, Group, or Officer" style="margin-bottom:16px; padding:8px; width:300px;">
+    <button id="schedule-all-btn" style="margin-left:16px; padding:8px 18px; background:#2d89ef; color:#fff; border:none; border-radius:20px; font-weight:600; cursor:pointer;">Schedule Disbursement for All</button>
+    <button id="cancel-all-btn" style="margin-left:8px; padding:8px 18px; background:#ff9800; color:#fff; border:none; border-radius:20px; font-weight:600; cursor:pointer;">Cancel All</button>
+    <table border="1" style="width:100%; text-align:center; margin-top:16px;">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Officer</th>
+                <th>Group</th>
+                <th>Member</th>
+                <th>Phone</th>
+                <th>Amount</th>
+                <th>Interest (%)</th>
+                <th>Duration (months)</th>
+                <th>Repayment</th>
+                <th>Collateral</th>
+                <th>Collateral Price</th>
+                <th>Disbursement Date/Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="disbursement-list"></tbody>
+    </table>
+    <script>
+    function renderTable(accounts) {
+        let tbody = document.getElementById('disbursement-list');
+        tbody.innerHTML = '';
+        if (accounts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="13">No loan accounts found.</td></tr>';
+        } else {
+            accounts.forEach((acc, idx) => {
+                tbody.innerHTML += `<tr>
+                    <td>${acc.date || ''}</td>
+                    <td>${acc.officer || ''}</td>
+                    <td>${acc.group || ''}</td>
+                    <td>${acc.member || ''}</td>
+                    <td>${acc.phone || ''}</td>
+                    <td>${acc.amount || ''}</td>
+                    <td>${acc.interest || ''}</td>
+                    <td>${acc.duration || ''}</td>
+                    <td>${acc.repayment || ''}</td>
+                    <td>${acc.collateral || ''}</td>
+                    <td>${acc.collateralPrice || ''}</td>
+                    <td>
+                        <input type="datetime-local" id="disb-date-${idx}" value="${acc.disbursementDateTime || ''}" style="width:160px;">
+                    </td>
+                    <td>
+                        <button onclick="scheduleDisbursement(${idx})" style="background:#2d89ef;color:#fff;border:none;border-radius:12px;padding:6px 12px;cursor:pointer;">Schedule</button>
+                        <button onclick="cancelDisbursement(${idx})" style="background:#ff9800;color:#fff;border:none;border-radius:12px;padding:6px 12px;cursor:pointer;margin-top:4px;">Cancel</button>
+                    </td>
+                </tr>`;
+            });
+        }
+    }
+
+    function filterAccounts() {
+        let filter = document.getElementById('filter-input').value.toLowerCase();
+        let accounts = JSON.parse(localStorage.getItem('loanAccounts') || '[]');
+        let filtered = accounts.filter(acc =>
+            (acc.member || '').toLowerCase().includes(filter) ||
+            (acc.group || '').toLowerCase().includes(filter) ||
+            (acc.officer || '').toLowerCase().includes(filter)
+        );
+        renderTable(filtered);
+    }
+
+    function scheduleDisbursement(index) {
+        let accounts = JSON.parse(localStorage.getItem('loanAccounts') || '[]');
+        let acc = accounts[index];
+        let dtInput = document.getElementById(`disb-date-${index}`);
+        let dateTime = dtInput.value;
+        if (!dateTime) {
+            alert("Please select a disbursement date and time.");
+            return;
+        }
+        acc.disbursementDateTime = dateTime;
+        // Simulate sending SMS to phone number
+        alert(`Disbursement scheduled for ${acc.member} (${acc.phone}) on ${dateTime}. SMS sent.`);
+        accounts[index] = acc;
+        localStorage.setItem('loanAccounts', JSON.stringify(accounts));
+        filterAccounts();
+    }
+
+    function scheduleAllDisbursements() {
+        let accounts = JSON.parse(localStorage.getItem('loanAccounts') || '[]');
+        let updated = false;
+        accounts.forEach((acc, idx) => {
+            let dtInput = document.getElementById(`disb-date-${idx}`);
+            if (dtInput && dtInput.value) {
+                acc.disbursementDateTime = dtInput.value;
+                // Simulate sending SMS to phone number
+                // In real app, integrate with SMS API here
+                updated = true;
+            }
+        });
+        if (updated) {
+            alert("Disbursement scheduled for all clients with selected date/time. SMS sent.");
+            localStorage.setItem('loanAccounts', JSON.stringify(accounts));
+            filterAccounts();
+        } else {
+            alert("Please select a disbursement date and time for at least one client.");
+        }
+    }
+
+    function cancelDisbursement(index) {
+        let accounts = JSON.parse(localStorage.getItem('loanAccounts') || '[]');
+        if (confirm("Cancel this loan disbursement?")) {
+            accounts.splice(index, 1);
+            localStorage.setItem('loanAccounts', JSON.stringify(accounts));
+            filterAccounts();
+        }
+    }
+
+    function cancelAllDisbursements() {
+        if (confirm("Cancel all loan disbursements?")) {
+            localStorage.removeItem('loanAccounts');
+            filterAccounts();
+        }
+    }
+
+    // Initial render
+    window.onload = function() {
+        filterAccounts();
+        document.getElementById('filter-input').addEventListener('input', filterAccounts);
+        document.getElementById('schedule-all-btn').onclick = scheduleAllDisbursements;
+        document.getElementById('cancel-all-btn').onclick = cancelAllDisbursements;
+    };
+    </script>
+</body>

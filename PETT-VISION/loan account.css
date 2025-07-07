@@ -1,0 +1,38 @@
+body {
+    background: url("Pett\ LOGO.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+.top-buttons {
+    position: fixed;
+    top: 5px;
+    left: 20px;
+    display: absolute;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px;
+    color: rgb(2, 2, 82);
+}
+
+.top-buttons-hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.loan-account-date {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #bfc9d9;
+    font-size: 16px;
+    background: #f7faff;
+    color: #02153d;
+    outline: none;
+    transition: border 0.2s;
+}

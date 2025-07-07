@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Member - PETT VISION</title>
+    <link rel="stylesheet" href="ADD MEMBER CSS.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="dashboard-section">
+            <h2>Register New Member</h2>
+            <form id="member-register-form" class="member-form-flex">
+                <div class="member-fields">
+                    <div class="input-box">
+                        <label for="member-full-name">Member Full Name:</label>
+                        <input type="text" id="member-full-name" class="input-field" placeholder="Member Full Name" required>
+                    </div>
+                <div class="input-box">
+                        <label for="member-id-number">Identification Type:</label>
+                        <select id="member-id-type" class="input-field" required>
+                            <option value="">--Please choose an option--</option>
+                            <option value="national-id">National ID</option>
+                            <option value="passport">Passport</option>
+                            <option value="driver-license">Driver's License</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="member-id-number">Member ID Number:</label>
+                        <input type="text" id="member-id-number" class="input-field" placeholder="Member ID Number" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="member-dob">Member Date of Birth:</label>
+                        <input type="text" id="member-dob" class="input-field" placeholder="Member Date of Birth" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="member-gender">Member Gender:</label>
+                        <select id="member-gender" class="input-field" required>
+                            <option value="">--Please choose an option--</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="member-email">Member Email:</label>
+                        <input type="email" id="member-email" class="input-field" placeholder="Member Email" optional>
+                    </div>
+                    <div class="input-box">
+                        <label for="member-phone">Member Phone Number:</label>
+                        <input type="text" id="member-phone" class="input-field" placeholder="Member Phone Number" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="resident-type">Resident Type:</label>
+                        <select id="resident-type" class="input-field" required>
+                            <option value="">--Please choose an option--</option>
+                            <option value="local">Permanent</option>
+                            <option value="foreigner">Temporary</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="member-address">Member Address:</label>
+                        <input type="text" id="member-address" class="input-field" placeholder="Member Address" required>
+                    </div>
+                </div>
+                <div class="guarantor-fields">
+                    <div class="input-box">
+                        <label for="guarantor-full-name">Guarantor Full Name:</label>
+                        <input type="text" id="guarantor-full-name" class="input-field" placeholder="Guarantor Full Name" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="guarantor-id-type">Guarantor ID Type:</label>
+                        <select id="guarantor-id-type" class="input-field" required>
+                            <option value="">--Please choose an option--</option>
+                            <option value="national-id">National ID</option>
+                            <option value="passport">Passport</option>
+                            <option value="driver-license">Driver's License</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="guarantor-id-number">Guarantor ID Number:</label>
+                        <input type="text" id="guarantor-id-number" class="input-field" placeholder="Guarantor ID Number" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="guarantor-dob">Guarantor Date of Birth:</label>
+                        <input type="text" id="guarantor-dob" class="input-field" placeholder="Guarantor Date of Birth" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="guarantor-gender">Guarantor Gender:</label>
+                        <select id="guarantor-gender" class="input-field" required>
+                            <option value="">--Please choose an option--</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="guarantor-email">Guarantor Email:</label>
+                        <input type="email" id="guarantor-email" class="input-field" placeholder="Guarantor Email" optional>
+                    </div>
+                    <div class="input-box">
+                        <label for="guarantor-phone">Guarantor Phone Number:</label>
+                        <input type="text" id="guarantor-phone" class="input-field" placeholder="Guarantor Phone Number" required>
+                    </div>
+                    <div class="input-box">
+                        <label for="guarantor-address">Guarantor Address:</label>
+                        <input type="text" id="guarantor-address" class="input-field" placeholder="Guarantor Address" required>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <label for="account-type">Account Type:</label>
+                    <select id="account-type" class="input-field" required>
+                        <option value="">--Please choose an option--</option>
+                        <option value="savings">Small Loan Account (Group)</option>
+                        <option value="current">Small Business Loan Account (Individual)</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label for="group-select">Group:</label>
+                    <select id="group-select" class="input-field" required>
+                        <option value="">--Please choose a group--</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label for="resident-type">Resident Type:</label>
+                    <select id="resident-type" class="input-field" required>
+                        <option value="">--Please choose an option--</option>
+                        <option value="urban">Urban</option>
+                        <option value="rural">Rural</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label for="marital-status">Marital Status:</label>
+                    <select id="marital-status" class="input-field" required>
+                        <option value="">--Please choose an option--</option>
+                        <option value="single">Single</option>
+                        <option value="married">Married</option>
+                        <option value="divorced">Divorced</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label for="employment-status">Employment Status:</label>
+                    <select id="employment-status" class="input-field" required>
+                        <option value="">--Please choose an option--</option>
+                        <option value="employed">Employed</option>
+                        <option value="unemployed">Unemployed</option>
+                        <option value="self-employed">Self-Employed</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label for="payment-method">Payment Method:</label>
+                    <select id="payment-method" class="input-field" required>
+                        <option value="">--Please choose an option--</option>
+                        <option value="cash">Cash</option>
+                        <option value="bank-transfer">Bank Transfer</option>
+                        <option value="mobile-money">Mobile Money</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label for="member-photo">Upload or Capture Member Photo:</label>
+                    <input type="file" id="member-photo" class="input-field" accept="image/*" capture="environment">
+                </div>
+                <div class="input-box">
+                    <label for="registration-date">Date of Registration:</label>
+                    <input type="date" class="input-field" id="registration-date" name="registration-date" required>
+                </div>
+                <div class="form-submit-row">
+                    <input type="submit" class="submit" value="Register Member">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+window.onload = function() {
+    // Load groups from localStorage (or your backend)
+    let groups = JSON.parse(localStorage.getItem('Groups') || '[]');
+    const groupSelect = document.getElementById('group-select');
+    groupSelect.innerHTML = '<option value="">--Please choose a group--</option>';
+    groups.forEach(group => {
+        // Assuming each group is an object with a 'name' property
+        groupSelect.innerHTML += `<option value="${group.name}">${group.name}</option>`;
+    });
+};
+
+document.getElementById('member-register-form').onsubmit = function(e) {
+    e.preventDefault();
+
+    // Collect member data
+    const member = {
+        fullName: document.getElementById('member-full-name').value,
+        idNumber: document.getElementById('member-id-number').value,
+        dob: document.getElementById('member-dob').value,
+        gender: document.getElementById('member-gender').value,
+        email: document.getElementById('member-email').value,
+        phone: document.getElementById('member-phone').value,
+        address: document.getElementById('member-address').value,
+        guarantorName: document.getElementById('guarantor-full-name').value,
+        guarantorId: document.getElementById('guarantor-id-number').value,
+        guarantorDob: document.getElementById('guarantor-dob').value,
+        guarantorGender: document.getElementById('guarantor-gender').value,
+        guarantorEmail: document.getElementById('guarantor-email').value,
+        guarantorPhone: document.getElementById('guarantor-phone').value,
+        guarantorAddress: document.getElementById('guarantor-address').value,
+        accountType: document.getElementById('account-type').value,
+        group: document.getElementById('group-select').value, // Save selected group
+        residentType: document.getElementById('resident-type').value,
+        maritalStatus: document.getElementById('marital-status').value,
+        employmentStatus: document.getElementById('employment-status').value,
+        paymentMethod: document.getElementById('payment-method').value,
+        registrationDate: document.getElementById('registration-date').value
+    };
+
+    if (!member.group) {
+        alert('Please select a group for this member.');
+        return;
+    }
+
+    // Save to localStorage
+    let members = JSON.parse(localStorage.getItem('Members') || '[]');
+    members.push(member);
+    localStorage.setItem('Members', JSON.stringify(members));
+
+    alert('Member registered!');
+    this.reset();
+};
+    </script>
+    <ul>
+        <li><a href="add-member.html" class="link">Add New Member</a></li>
+    </ul>
+</body>
+</html>
